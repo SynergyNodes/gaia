@@ -90,7 +90,11 @@ func NewMultiSendCmd() *cobra.Command {
 				if index < startIndex {
 					continue
 				}
-				msgs = append(msgs, &msg)
+				msgs = append(msgs, &banktypes.MsgSend{
+					FromAddress: msg.FromAddress,
+					ToAddress:   msg.ToAddress,
+					Amount:      msg.Amount,
+				})
 				if len(msgs) >= threshold || index+1 == len(sendMsgs) {
 					err := tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgs...)
 					if err != nil {
